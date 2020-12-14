@@ -1,0 +1,19 @@
+[package]
+name = "didgen"
+version = "0.1.0"
+authors = ["Matt Raffel <mattr@kiva.org>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+clap = {version = "2.33.1", features = ["yaml"]}
+failure = "0.1.6"
+# indy is tied to this version of futures, cannot upgrade
+futures = "0.1.24"
+indy = "1.15.0"
+indy-sys = "1.15.0"
+libc = "=0.2.66"
+serde_json = "1.0.40"
+serde_derive = "1.0.97"
+serde = "1.0.97"
