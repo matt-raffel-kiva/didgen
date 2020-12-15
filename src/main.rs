@@ -44,7 +44,7 @@ fn main() {
     let handle: WalletHandle = wallet::open_wallet(&config, &wallet_config).wait().unwrap();
     let (did, verkey) = did::create_and_store_my_did(handle, &did_json).wait().unwrap();
     wallet::close_wallet(handle).wait();
-    
+
     println!("did    -> {}", did);
     println!("verkey -> {}", verkey);
 
