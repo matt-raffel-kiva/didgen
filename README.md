@@ -14,7 +14,7 @@ You need to have libindy installed or built on your system. See [docs](https://g
 ## Command Line arguments
 `--wallet` (optional), specify the name of the wallet to use  
 `--password` (optional), specific the password for the wallet    
-`--seed` (optional), specify the cryptographic seed for generating did and verkey  
+`--seed` (optional), specify the cryptographic seed for generating did and verkey. Must be 32 bytes  
 
 ## Output
 

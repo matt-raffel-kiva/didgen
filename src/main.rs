@@ -15,6 +15,7 @@ use indy::{
 
 
 fn main() {
+    // do all the configuration setup
     let yaml = load_yaml!("config.yml");
     let options: ArgMatches = App::from_yaml(yaml).get_matches();
 
@@ -27,12 +28,6 @@ fn main() {
     let wallet_config: String = json!({
         "key" : wallet_password,
     }).to_string();
-
-
-    // for now, ignore result :(
-    let _result = wallet::create_wallet(&config, &wallet_config.clone()).wait();
-    let handle: WalletHandle = wallet::open_wallet(&config, &wallet_config).wait().unwrap();
-
     let seed_input: &str = options.value_of("seed").unwrap_or("tbd");
     let mut did_json: String = "{}".to_owned();
     if seed_input != "tbd" {
@@ -43,9 +38,14 @@ fn main() {
         did_json = json_config.to_string();
     }
 
+    // now make the indy sdk calls to generate DID VERKY pair and output results.
+    // for now, ignore results :( and let errors bubble
+    let _result = wallet::create_wallet(&config, &wallet_config.clone()).wait();
+    let handle: WalletHandle = wallet::open_wallet(&config, &wallet_config).wait().unwrap();
     let (did, verkey) = did::create_and_store_my_did(handle, &did_json).wait().unwrap();
+    wallet::close_wallet(handle).wait();
+    
     println!("did    -> {}", did);
     println!("verkey -> {}", verkey);
 
-    wallet::close_wallet(handle).wait();
 }
