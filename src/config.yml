@@ -10,20 +10,6 @@ settings:
 # All Args must be defined in the 'args:' list where the name of the arg, is the
 # key to a Hash object
 args:
-  - wallet:
-      help: name of wallet, 'didgen1.0' will be used if none is provided
-      short: w
-      long: wallet
-      required: false
-      takes_value: true
-      default_value: didgen1.0
-  - password:
-      help: wallet password, default used if none is provided
-      short: p
-      long: password
-      required: false
-      takes_value: true
-      default_value: 9DXvkIMD7iSgD&RT$XYjHo0t
   - seed:
       help: seed for did generation. random will be used if none is provided
       short: s

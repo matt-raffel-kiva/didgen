@@ -1,51 +1,46 @@
 #![allow(unused_must_use)]
 
 #[macro_use] extern crate clap;
-extern crate futures;
-extern crate indyrs as indy;
-#[macro_use] extern crate serde_json;
+extern crate rust_base58;
+extern crate sodiumoxide;
 
 use clap::{App, ArgMatches};
-use futures::future::Future;
-use indy::{
-    did,
-    wallet,
-    WalletHandle
+use rust_base58::ToBase58;
+use sodiumoxide::crypto::sign::ed25519::{
+    gen_keypair,
+    keypair_from_seed,
+    Seed
 };
-
 
 fn main() {
     // do all the configuration setup
     let yaml = load_yaml!("config.yml");
     let options: ArgMatches = App::from_yaml(yaml).get_matches();
-
-    let wallet_name: &str = options.value_of("wallet").unwrap_or("didgen1.0");
-    let wallet_password: &str= options.value_of("password").unwrap_or("9DXvkIMD7iSgD&RT$XYjHo0t");
-    let config: String =  json!({
-            "id": wallet_name,
-            "storage_type": "default",
-        }).to_string();
-    let wallet_config: String = json!({
-        "key" : wallet_password,
-    }).to_string();
     let seed_input: &str = options.value_of("seed").unwrap_or("tbd");
-    let mut did_json: String = "{}".to_owned();
-    if seed_input != "tbd" {
-        let json_config = json!({
-           "seed": seed_input
-        }).to_string();
+    let did: String;
+    let ver_key: String;
+    let private_key: String;
+    match seed_input {
+        "tbd" => {
+            // testing if we can use sodiumoxide crate instead of indy
+            let (v, s) = gen_keypair();
+            did = v[0..16].to_vec().to_base58();
+            ver_key = v[..].to_base58();
+            private_key = s[..].to_base58();
 
-        did_json = json_config.to_string();
-    }
+        },
+        _ => {
+            // testing if we can use sodiumoxide crate instead of indy
+            let seed_bytes: &[u8] = seed_input.clone().as_bytes();
+            let (v, s) = keypair_from_seed(&Seed::from_slice(seed_bytes).unwrap());
+            did = v[0..16].to_vec().to_base58();
+            ver_key = v[..].to_base58();
+            private_key = s[..].to_base58();
+        }
+    };
 
-    // now make the indy sdk calls to generate DID VERKY pair and output results.
-    // for now, ignore results :( and let errors bubble
-    let _result = wallet::create_wallet(&config, &wallet_config.clone()).wait();
-    let handle: WalletHandle = wallet::open_wallet(&config, &wallet_config).wait().unwrap();
-    let (did, verkey) = did::create_and_store_my_did(handle, &did_json).wait().unwrap();
-    wallet::close_wallet(handle).wait();
-
-    println!("did    -> {}", did);
-    println!("verkey -> {}", verkey);
+    println!("did          -> {}", did);
+    println!("verkey       -> {}", ver_key);
+    println!("pk           -> {}", private_key);
 
 }
