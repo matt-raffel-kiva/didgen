@@ -4,7 +4,7 @@ Command line tool to generate did, verkey pairs.
 
 
 ## Building
-Install rust. Built using `1.48.0`. Pull the code.    
+Install rust. Built using `1.54.0`. Pull the code.    
 
 At the root of project, `cargo build`.
 
