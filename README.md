@@ -2,6 +2,7 @@
 
 Command line tool to generate did, verkey pairs.  
 
+Intended to follow the [specification](https://www.w3.org/TR/did-1.0/) but probably needs work.
 
 ## Building
 Install rust. Built using `1.54.0`. Pull the code.    
@@ -16,7 +17,9 @@ You need to have libsodium installed or built on your system.
 
 ## Output
 
-note: verkey is also public key.  Keeping name to match [indy](https://github.com/hyperledger/indy-sdk) naming.
+note: verkey is also public key.  Keeping name to match [indy](https://github.com/hyperledger/indy-sdk) naming.  TODO: change to public key.
+
+```
 
 With no arguments used
 ```
